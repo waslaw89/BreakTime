@@ -13,11 +13,11 @@ if exists("break_log.txt") == True:
 		lastLine=x
 	except:
 		lastLine=""
-	f.close()
+	f.close()	
 else:
 	f = open("break_log.txt", "w")
+	f.write("Date|BrakeStart|BreakEnd|BreakTime")
 	f.close()
-
 
 header = n*"#"+"\n   Break Time App\n"+ n*"#"
 print(header)
@@ -43,7 +43,7 @@ stop_time = stop.strftime("%H:%M:%S")
 print("->break stop:  ",stop_time)
 print("\n"+n*"-")
 
-#uwzglednienie tylko dzis
+#only todays
 date = now.strftime("%Y:%m:%d")
 try:
 	arr = lastLine.split("|")
@@ -58,19 +58,20 @@ except:
 #current break cout
 delta = stop - timedelta(hours=int(arr_start_time[0]), minutes=int(arr_start_time[1]), seconds=int(arr_start_time[2]))
 break_now = delta.strftime("%H:%M:%S")
-print("Current break time : ",break_now)
+print("Current break time:  ",break_now)
 
 #summary brak count
 arr_break_today = break_today.split(":")
 arr_break_now = break_now.split(":")
 sum = timedelta(hours=int(arr_break_today[0]), minutes=int(arr_break_today[1]), seconds=int(arr_break_today[2])) + timedelta(hours=int(arr_break_now[0]), minutes=int(arr_break_now[1]), seconds=int(arr_break_now[2]))
 break_sum  = str(sum)
-print("Summary break time:   ",break_sum)
+if len(break_sum) == 7: break_sum = "0" + break_sum
+print("Summary break time:  ",break_sum)
 print(n*"+")
 
 #save log
 f = open("break_log.txt", "a")
-log = date + "|"+ start_time + "|" + stop_time+ "|" + break_now+ "|" + break_sum + "\n"
+log = "\n" + date + "|"+ start_time + "|" + stop_time+ "|" + break_now+ "|" + break_sum
 f.write(log)
 f.close()
 ToDo = input("Hit ENTER to close")
